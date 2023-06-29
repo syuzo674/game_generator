@@ -3,13 +3,13 @@ include("function.php");
 
 // POSTデータ確認
 if (
-    //入力データが足りないパターンの処理
     !isset($_POST["name"]) || $_POST["name"] === "" ||
     !isset($_POST["age"]) || $_POST["age"] === "" ||
     !isset($_POST["description"]) || $_POST["description"] === "" || 
-    !isset($_POST["category"]) || $_POST["category"] === ""
+    !isset($_POST["category"]) || $_POST["category"] === "" ||
+    !isset($_POST["id"]) || $_POST["id"] === ""
 
-    ){
+) {
     exit("データが足りません");
 }
 
@@ -18,12 +18,13 @@ $name = $_POST['name'];
 $age = $_POST['age'];
 $description = $_POST['description'];
 $category = $_POST['category'];
+$id = $_POST['id'];
 
 // DB接続
 $pdo = connect_to_db();
 
 // SQL作成&実行
-$sql = 'INSERT INTO resource_table (id, name, age, description, category, created_at, updated_at) VALUES (NULL, :name, :age, :description, :category, now(), now())';
+$sql = 'UPDATE resource_table SET name=:name, age=:age, description=:description, category=:category, updated_at=now() WHERE id=:id';
 
 $stmt = $pdo->prepare($sql);
 
@@ -32,6 +33,7 @@ $stmt->bindValue(':name', $name, PDO::PARAM_STR);
 $stmt->bindValue(':age', $age, PDO::PARAM_STR);
 $stmt->bindValue(':description', $description, PDO::PARAM_STR);
 $stmt->bindValue(':category', $category, PDO::PARAM_STR);
+$stmt->bindValue(':id', $id, PDO::PARAM_STR);
 
 // SQL実行（実行に失敗すると `sql error ...` が出力される）
 try {
@@ -41,8 +43,7 @@ try {
   exit();
 }
 
-// SQL実行の処理
-header('Location:index.php');
+header('Location:read.php');
 exit();
 
 
