@@ -1,19 +1,11 @@
 <?php
-// 各種項目設定
-$dbn ='mysql:dbname=game_generator;charset=utf8mb4;port=3306;host=localhost';
-$user = 'root';
-$pwd = '';
+include("function.php");
 
 // DB接続
-try {
-  $pdo = new PDO($dbn, $user, $pwd);
-} catch (PDOException $e) {
-  echo json_encode(["db error" => "{$e->getMessage()}"]);
-  exit();
-}
+$pdo = connect_to_db();
 
 // SQL作成&実行
-$sql = 'SELECT * FROM resource_table ORDER BY updated_at ASC';
+$sql = 'SELECT * FROM resource_table WHERE deleted_at IS NULL ORDER BY created_at ASC';
 $stmt = $pdo->prepare($sql);
 
 try {
@@ -38,6 +30,12 @@ foreach ($result as $record) {
         <td>{$record["name"]}</td>
         <td>{$record["age"]}</td>
         <td>{$record["description"]}</td>
+        <td>
+          <a href='edit.php?id={$record["id"]}'>edit</a>
+        </td>
+        <td>
+          <a href='delete.php?id={$record["id"]}'>delete</a>
+        </td>
     </tr>
   ";
 }
