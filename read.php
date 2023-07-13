@@ -1,5 +1,7 @@
 <?php
-include("function.php");
+session_start();
+include("functions.php");
+check_session_id();
 
 // DB接続
 $pdo = connect_to_db();
@@ -29,14 +31,18 @@ foreach ($result as $record) {
         <td>{$record["category"]}</td>
         <td>{$record["name"]}</td>
         <td>{$record["age"]}</td>
-        <td>{$record["description"]}</td>
-        <td>
-          <a href='edit.php?id={$record["id"]}'>edit</a>
-        </td>
-        <td>
-          <a href='delete.php?id={$record["id"]}'>delete</a>
-        </td>
-    </tr>
+        <td>{$record["description"]}</td>";
+      if($_SESSION['is_admin'] === 1) {
+        $output .= "
+          <td>
+            <a href='edit.php?id={$record["id"]}'>edit</a>
+          </td>
+          <td>
+            <a href='delete.php?id={$record["id"]}'>delete</a>
+          </td>";
+      }
+  $output .= "
+      </tr>
   ";
 }
 
@@ -53,8 +59,9 @@ foreach ($result as $record) {
 
 <body>
   <fieldset>
-    <legend>DB一覧画面</legend>
-    <a href="index.php">入力画面</a>
+    <legend>DB一覧画面 <?= $_SESSION['username'] ?>さん</legend>
+    <a href="input.php">入力画面</a>
+    <a href="logout.php">logout</a>
     <table>
       <thead>
         <tr>
@@ -74,4 +81,3 @@ foreach ($result as $record) {
 </body>
 
 </html>
-

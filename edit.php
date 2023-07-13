@@ -1,5 +1,7 @@
 <?php
-include("function.php");
+session_start();
+include("functions.php");
+check_session_id();
 
 // id受け取り
 // var_dump($_GET);
@@ -63,6 +65,7 @@ $result = $stmt->fetch(PDO::FETCH_ASSOC);
       <div>
         <button>submit</button>
       </div>
+      <input type="hidden" name="id" value="<?= $result["id"] ?>">
     </fieldset>
   </form>
 

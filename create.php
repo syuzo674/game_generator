@@ -1,5 +1,7 @@
 <?php
-include("function.php");
+session_start();
+include("functions.php");
+check_session_id();
 
 // POSTデータ確認
 if (
@@ -42,7 +44,7 @@ try {
 }
 
 // SQL実行の処理
-header('Location:index.php');
+header('Location:input.php');
 exit();
 
 
